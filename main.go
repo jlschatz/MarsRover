@@ -27,7 +27,9 @@ func main() {
 
 	xStart, yStart := zone.ReadRoverStartingCoOrdinates()
 
-	rover := Rover{xStart, yStart, "E", zone}
+	startingDirection := ReadStartingDirection()
+
+	rover := Rover{xStart, yStart, startingDirection, zone}
 
 	move := ReadRoverMoveOrders()
 
@@ -38,7 +40,7 @@ func main() {
 	log.Println("------------------------------------")
 	log.Printf("X Axis: %v", rover.CurrentX)
 	log.Printf("Y Axis: %v", rover.CurrentY)
-	log.Printf("Direction facing: %v", rover.CurrentDirection)
+	log.Printf("Direction facing: %v", strings.ToUpper(rover.CurrentDirection))
 }
 
 func (r *Rover) MoveRover(movement string) {
@@ -188,6 +190,25 @@ func (z *Zone) ReadRoverStartingCoOrdinates() (int, int) {
 	return x, y
 }
 
+func ReadStartingDirection() string {
+	var direction string
+	reader := bufio.NewReader(os.Stdin)
+
+	for {
+		log.Println("Please enter Rover starting direction:")
+
+		direction, _ = reader.ReadString('\n')
+		direction = strings.TrimSuffix(direction, "\n")
+
+		if !ConfirmRoverStartingDirectionValidity(direction) {
+			log.Println("Rover staring direction not correct. Only 'N', 'E', 'S' or 'W' permitted")
+			continue
+		}
+		break
+	}
+	return direction
+}
+
 func ReadRoverMoveOrders() string {
 
 	var move string
@@ -213,6 +234,17 @@ func ConfirmRoverMoveOrdersValidity(orders string) bool {
 
 	for _, char := range orders {
 		if !strings.Contains(alpha, strings.ToLower(string(char))) {
+			return false
+		}
+	}
+	return true
+}
+
+func ConfirmRoverStartingDirectionValidity(direction string) bool {
+	const direc = "nesw"
+
+	for _, char := range direction {
+		if !strings.Contains(direc, strings.ToLower(string(char))) {
 			return false
 		}
 	}
