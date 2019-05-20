@@ -1,8 +1,11 @@
 package main
 
 import (
+	"bufio"
 	"github.com/pkg/errors"
 	"log"
+	"os"
+	"strconv"
 	"strings"
 )
 
@@ -20,33 +23,49 @@ type Rover struct {
 
 func main() {
 
-	rover :=  Rover{3,5,"E", Zone{8,7}}
+	zone := ReadZoneDimentions()
 
-	move := "MLRMRR"
+	rover :=  Rover{3,5,"E", zone}
+
+	move := ReadRoverMoveOrders()
 
 	rover.MoveRover(move)
 
+	rover.Zone.CreateZone()
+
+	log.Println("------------------------------------")
+	log.Println("| Rover ending co-ordinates        |")
+	log.Println("------------------------------------")
 	log.Printf("X Postition: %v\nY Position: %v\nCurrent Direction: %v", rover.CurrentX, rover.CurrentY, rover.CurrentDirection)
 }
 
 func (z *Zone)CreateZone(){
 	var ar  []string
 
-	log.Println("--------------------------")
-	log.Println("Your zone:")
 	log.Println("---------------------------")
-	for q := z.Y; q > 0 ; q-- {
-		for p := z.X; p > 0; p-- {
-
-			ar = append(ar, "X ")
+	log.Println("| Your zone:              |")
+	log.Println("---------------------------")
+	for q := z.X; q > 0 ; q-- {
+		ar = append(ar, strconv.Itoa(q))
+		for p := z.Y; p > 0; p-- {
+			ar = append(ar, " ")
 		}
 		log.Println(ar)
-		log.Println()
 		ar = []string{}
 	}
+	yAxisAray := []string{"0"}
+
+	for x := 1; z.Y >= x ; x++ {
+		yAxisAray = append(yAxisAray, strconv.Itoa(x))
+	}
+	log.Println(yAxisAray)
 }
 
 func (r *Rover)MoveRover(movement string) {
+
+	log.Println("------------------------------------")
+	log.Println("| Rover movement log               |")
+	log.Println("------------------------------------")
 
 	for _ , m := range movement {
 
@@ -133,6 +152,33 @@ func (r *Rover)MoveRover(movement string) {
 	}
 
 	log.Println("------------------------------------")
-	log.Println("| Rover movement sequence complete |")
-	log.Println("------------------------------------")
 }
+
+func ReadZoneDimentions() Zone{
+
+	reader := bufio.NewReader(os.Stdin)
+
+	log.Println("Please enter Zone X axis length:")
+	xAxis, _ := reader.ReadString('\n')
+	x, _ := strconv.Atoi(xAxis)
+
+	log.Println("Please enter Zone Y axis length:")
+	yAxis, _ := reader.ReadString('\n')
+	y, _ := strconv.Atoi(yAxis)
+
+	zone := Zone{x, y}
+
+	return zone
+}
+
+func ReadRoverMoveOrders()string{
+
+	reader := bufio.NewReader(os.Stdin)
+
+		log.Println("Please enter Rover movement orders:")
+
+		move, _ := reader.ReadString('\n')
+
+		return move
+}
+
