@@ -1,6 +1,6 @@
-## MarsRover
+# MarsRover
 
-# Example input
+## Example input
 
  8 10
  
@@ -9,7 +9,7 @@
  MMLMRMMRRMML
      
      
-# This is how the rover will interpret the above commands:
+## This is how the rover will interpret the above commands:
   * The first line describes how big the current zone is. This zone’s boundary is at
     the Cartesian coordinate of 8,10 and the zone comprises 80 blocks.
   * The second line describes the rover’s starting location and orientation.
