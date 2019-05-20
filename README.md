@@ -1,6 +1,6 @@
-# MarsRover
+## MarsRover
 
-##Example input
+# Example input
 
  8 10
  
